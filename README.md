@@ -249,15 +249,3 @@ If you encounter any issues:
 2. Look for error messages in the terminal
 3. Make sure all prerequisites are installed
 4. Verify all configuration files are set up correctly
-
-## 📝 License
-
-[Add your license information here]
-
-## 🤝 Contributing
-
-We welcome contributions! Please feel free to submit a Pull Request.
-
----
-
-Need more help? Feel free to open an issue on the project repository! 
