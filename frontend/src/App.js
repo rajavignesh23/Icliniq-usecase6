@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import "./App.css";
 export default function DiseasePredictor() {
   const [patientId] = useState(localStorage.getItem("username") || "");
   const [patientData, setPatientData] = useState(null);
@@ -72,30 +72,30 @@ export default function DiseasePredictor() {
   };
   
   return (
-    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Disease Prediction</h1>
-      {loading && <p className="text-blue-500">Fetching patient data...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+    <div className="auth-container">
+      <h1 className="auth-title">Disease Prediction</h1>
+      {loading && <p className="loading-text">Fetching patient data...</p>}
+      {error && <p className="error-text">{error}</p>}
 
       {isNewPatient && (
-        <div className="bg-white p-4 rounded shadow w-80 mb-4">
-          <h2 className="text-lg font-semibold text-blue-600">Welcome, new patient!</h2>
-          <p>Start by entering your symptoms below.</p>
+        <div className="new-patient-box">
+          <h2 className="new-patient-title">Welcome, new patient!</h2>
+          <p className="new-patient-text">Start by entering your symptoms below.</p>
         </div>
       )}
 
       {patientData && (
-        <div className="bg-white p-4 rounded shadow w-80 mb-4">
-          <h2 className="text-lg font-semibold">Patient Details</h2>
-          <p><strong>Username:</strong> {patientId}</p>
-          <p><strong>Age:</strong> {patientData.age}</p>
-          <p><strong>Gender:</strong> {patientData.gender}</p>
+        <div className="patient-details-box">
+          <h2 className="patient-details-title">Patient Details</h2>
+          <p className="patient-info"><strong>Username:</strong> {patientId}</p>
+          <p className="patient-info"><strong>Age:</strong> {patientData.age}</p>
+          <p className="patient-info"><strong>Gender:</strong> {patientData.gender}</p>
         </div>
       )}
 
       <textarea
-        className="w-80 p-2 border border-gray-300 rounded mb-4"
-        style={{ height: "80px" }}
+        className="symptom-input"
+        
         placeholder="Enter symptoms..."
         value={symptoms}
         onChange={(e) => setSymptoms(e.target.value)}
@@ -103,39 +103,33 @@ export default function DiseasePredictor() {
 
       <button
         onClick={handlePredict}
-        className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all flex items-center justify-center ${
-          loading ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className={`predict-button ${loading ? "disabled" : ""}`}
         disabled={loading}
       >
         {loading ? "Predicting..." : "Predict"}
       </button>
 
       {results.length > 0 && (
-        <div className="mt-6 w-80 bg-white p-4 rounded shadow">
-          <h2 className="text-lg font-semibold mb-2">Suggested Diseases:</h2>
+        <div className="results-box">
+          <h2 className="results-title">Suggested Diseases:</h2>
           <ul>
             {results.map(({ disease, probability }, index) => (
-              <li key={index} className="border-b py-2">
-                {disease} - <span className="text-blue-600">{(probability * 100).toFixed(2)}%</span>
+              <li key={index} className="result-item">
+                {disease} - <span className="probability-text">{(probability * 100).toFixed(2)}%</span>
               </li>
             ))}
           </ul>
         </div>
       )}
 
-{llmResponse && typeof llmResponse === "object" && (
-  <div className="mt-6 w-80 bg-white p-4 rounded shadow">
-    <h2 className="text-lg font-semibold mb-2">Correlative Analysis:</h2>
-    <p><strong>Final Diagnosis:</strong> {llmResponse.final_diagnosis}</p>
-   
-    <p><strong>Explanation:</strong> {llmResponse.explanation}</p>
-    <p><strong>Suggestion:</strong> {llmResponse.suggestion}</p>
-  </div>
-)}
-
-
-
+      {llmResponse && typeof llmResponse === "object" && (
+        <div className="analysis-box">
+          <h2 className="analysis-title">Correlative Analysis:</h2>
+          <p className="analysis-text"><strong>Final Diagnosis:</strong> {llmResponse.final_diagnosis}</p>
+          <p className="analysis-text"><strong>Explanation:</strong> {llmResponse.explanation}</p>
+          <p className="analysis-text"><strong>Suggestion:</strong> {llmResponse.suggestion}</p>
+        </div>
+      )}
     </div>
   );
 }
